@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vega ARIA localization harness</title>
+    <script src="../../build/vega.js"></script>
+    <script src="aria-localization.js" defer></script>
+    <style>
+      body { max-width: 1100px; margin: 32px auto; padding: 0 20px; font: 16px/1.5 system-ui, sans-serif; color: #172b3a; background: #f5f7fa; }
+      h1 { margin-bottom: 4px; font-size: 28px; }
+      h2 { font-size: 20px; }
+      p { max-width: 80ch; }
+      fieldset { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin: 24px 0; border: 0; padding: 0; }
+      legend { margin-bottom: 8px; font-weight: 600; }
+      button, select { font: inherit; padding: 6px 12px; border: 1px solid #879aaa; border-radius: 6px; background: white; }
+      button { cursor: pointer; }
+      button[aria-pressed="true"] { color: white; background: #1254a1; border-color: #1254a1; }
+      :focus-visible { outline: 3px solid #cd6500; outline-offset: 3px; }
+      #chart { overflow-x: auto; padding: 20px; background: white; border: 1px solid #d5dfe8; border-radius: 8px; }
+      #status { min-height: 24px; }
+      #error { color: #a01515; white-space: pre-wrap; }
+      .table-container { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; background: white; font-size: 14px; }
+      th, td { padding: 10px; text-align: left; vertical-align: top; border: 1px solid #d5dfe8; overflow-wrap: anywhere; }
+      th { background: #eaf0f6; }
+      code, pre { font-size: 13px; }
+      pre { overflow-x: auto; padding: 16px; background: white; }
+      summary { cursor: pointer; font-weight: 600; }
+    </style>
+  </head>
+  <body>
+    <h1>ARIA localization harness</h1>
+    <p>Compare Turkish and English accessibility descriptions on a complete Vega View.
+      Switching languages calls <code>view.ariaLocale(...).runAsync()</code> on the existing chart.</p>
+    <fieldset id="controls" disabled>
+      <legend>Chart settings</legend>
+      <button type="button" data-language="tr" aria-pressed="true" lang="tr">Türkçe</button>
+      <button type="button" data-language="en" aria-pressed="false">English</button>
+      <label for="count">Categories</label>
+      <select id="count">
+        <option value="1">1 (single value)</option>
+        <option value="3" selected>3 (value list)</option>
+        <option value="10">10 (truncated list)</option>
+      </select>
+      <label for="legend-kind">Legend</label>
+      <select id="legend-kind">
+        <option value="categories">Categories (value list)</option>
+        <option value="boundaries">Thresholds (boundary list)</option>
+      </select>
+    </fieldset>
+    <p id="status" role="status" aria-live="polite">Loading the local Vega build...</p>
+    <p id="error" role="alert" hidden></p>
+    <div id="chart" lang="tr"></div>
+    <p>Visible chart text and per-mark descriptions are authored in Turkish and stay unchanged.
+      Only generated ARIA text changes language. Try a screen reader or inspect the live attributes below.</p>
+    <h2>Live ARIA attributes</h2>
+    <div class="table-container">
+      <table>
+        <thead><tr><th scope="col">Element</th><th scope="col">Role description</th><th scope="col">Label</th></tr></thead>
+        <tbody id="labels"></tbody>
+      </table>
+    </div>
+    <details>
+      <summary>Turkish locale definition</summary>
+      <p>Turkish nouns stay singular after numbers: <span lang="tr">1 değer, 3 değer</span>.
+        The translated templates omit untranslated internal identifiers such as <code>linear</code> and <code>symbol</code>.</p>
+      <pre id="definition" lang="tr"></pre>
+    </details>
+    <details>
+      <summary>Run locally</summary>
+      <p>After building Vega, run <code>npm run serve</code> from the repository root and open
+        <code>http://localhost:8080/test/web/aria-localization.html</code>.
+        This harness uses only local files; no CDN or remote data is required.</p>
+    </details>
+  </body>
+</html>
